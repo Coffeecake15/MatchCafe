@@ -16,6 +16,11 @@ This allows random images to be chosen based on a random number assortment.
 
 */
 let isSecondClick = false;
+let disableClick = true;
+let points = 0;
+let pointDisplay = document.getElementById("pointCounter");
+let firstCard;
+let firstCardSrc;
 
 let randSet = new Set();
 let arrayOfNames = [
@@ -39,6 +44,8 @@ let arrayOfNames = [
     "Card_Images/memImage18-9.png"
 ]; 
 
+pointDisplay.innerHTML = "Points: " + points
+
 /*
 //array that holds the image source names in the order of 
 //the card names. For instance, if card 10 has image 5, then index 10 has string "memImage5"
@@ -57,6 +64,7 @@ memImage21
 you can slice off the end of the string name 
 */
 let cardNameCorrelation = [] 
+let takenCards = [] //cards that already racked up points, can't click them again
 let index = 0;
 while (randSet.size < 18) {
     let randNumber = Math.floor(Math.random() * 18)
@@ -73,23 +81,41 @@ for (let i = 1; i < 19; i++) {
     cardNameCorrelation[i -1] = nameOfImage;
 }
 
-console.log(cardNameCorrelation)
+//console.log(cardNameCorrelation)
 //Flip to backs after exactly 2 seconds
 
 //UNCOMMENT THIS!!!!! Commented now to save time, but is crucial during gameplay!
 setTimeout(() => {
   for (let i = 1; i < 19; i++) {
     document.getElementById("card" + i).src = "Card_Images/bro.png";
+    disableClick = false;
 }
 }, 2000);
 
 
 let cardButton = document.querySelector('.gameGrid');
+
+//Card button click
+
+
+
 cardButton.addEventListener('click', e => {
     let cardName = e.target.id;
-    let cardSrc = document.getElementById(cardName);
     cardName = cardName.replace("div", "") //Doesn't matter if div or image is chosen; referred to by image now
+    //Don't do anything if the click is disabled or already flipped
+
+    if (disableClick
+        || document.getElementById(cardName).getAttribute("src") != "Card_Images/bro.png"
+    ) { //Don't flip if it's disabled (such as the start of game) OR it's already turned over
+        console.log("disabled");
+        return;
+    } 
     
+    console.log(e.target.id)
+    let cardSrc = document.getElementById(cardName);
+    
+
+
     console.log("START")
     console.log(cardName)
     console.log(cardNameCorrelation)
@@ -102,28 +128,42 @@ cardButton.addEventListener('click', e => {
     console.log(imageName)
     //Note: e.target.id will be card + number. Get the image that correlates to the card's index in the cardNameCorrelationArray
     //check which side card is
-    console.log(cardName)
+    console.log(e.target.id)
     
     //if cardName is div and not img, then you need to change to get query selector 
     
-    if (e.target.id.localName == "div") { //not detecting it as a div
-        cardSrc = cardName.querySelector("img");
+    let testDiv = e.target.id;
+    if (testDiv.slice(0, 3) == "div") { //not detecting it as a div
+        cardSrc = cardSrc.querySelector("img");
+        console.log("oofykins")
     }
-    console.log(cardSrc)
-
+    cardSrc.src = imageName
+    /*flips either way, probably no need
     if (cardSrc.getAttribute("src") == imageName) {
         cardSrc.src = "Card_Images/bro.png"
     } else {
-        cardSrc.src = imageName
+        
+    cardSrc.src = imageName
     }
+*/
+console.log(cardSrc.getAttribute("src"))
 
-    //Checks if this is the match card. 
+
+
+        //Checks if this is the match card. 
+
     if (isSecondClick) {
+        checkMatch(firstCard, imageName, firstCardSrc, cardSrc);
         //this is the second match. time to calculate things!
         isSecondClick = false;
+
     } else {
+        firstCard = imageName;
+        firstCardSrc = cardSrc;
         isSecondClick = true;
     }
+
+
 
 
     /*if (imageName.at()) {
@@ -132,6 +172,29 @@ cardButton.addEventListener('click', e => {
 
 })
 
+
+
+function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc) {
+    console.log(firstCard)
+    console.log(secondCard)
+    firstCard = firstCard.replace(".png", "")
+    secondCard = secondCard.replace(".png", "")
+    if (firstCard.at(firstCard.length - 1) 
+        == secondCard.at(secondCard.length - 1)) { //if the last numbers match, it's a match! yipee!
+        points++;
+        takenCards.push();
+        pointDisplay.innerHTML = "Points: " + points
+        //make this update automaticallY? idk
+    } else {
+        disableClick = true;
+        setTimeout(() => {
+            firstCardSrc.src = "Card_Images/bro.png";
+            secondCardSrc.src = "Card_Images/bro.png";
+            disableClick = false;
+        }, 2000);
+        
+    }
+}
 
 
 //when a card is clicked. 
