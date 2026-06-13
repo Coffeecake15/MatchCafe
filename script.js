@@ -21,6 +21,31 @@ let points = 0;
 let pointDisplay = document.getElementById("pointCounter");
 let firstCard;
 let firstCardSrc;
+let timerDisplay = document.getElementById("countdownTimer");
+let timeLeft;
+
+let openingScreen = document.getElementById("openingScreen");
+let gameScreen = document.getElementById("gameScreen")
+
+let playButtons = document.querySelector(".playButtons");
+
+openingScreen.addEventListener('click', e => {
+    if (e.target.id == "easyButton") {
+        timeLeft = 120;
+    } else if (e.target.id == "mediumButton") {
+        timeLeft = 90;
+    } else if (e.target.id == "hardButton") {
+        timeLeft = 60;
+    }
+
+    console.log(e.target.id)
+    openingScreen.style.display = "none"
+    timerDisplay.innerHTML = timeLeft;
+    gameScreen.style.display = "block"
+    pointDisplay.innerHTML = "Points: " + points
+
+
+
 
 let randSet = new Set();
 let arrayOfNames = [
@@ -44,7 +69,8 @@ let arrayOfNames = [
     "Card_Images/memImage18-9.png"
 ]; 
 
-pointDisplay.innerHTML = "Points: " + points
+
+
 
 /*
 //array that holds the image source names in the order of 
@@ -92,6 +118,14 @@ setTimeout(() => {
 }
 }, 2000);
 
+const clockCountdown = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerHTML = timeLeft;
+        if (timeLeft == 0) {
+            clearInterval(clockCountdown)
+        }
+        }, 1000);
+    
 
 let cardButton = document.querySelector('.gameGrid');
 
@@ -101,6 +135,7 @@ let cardButton = document.querySelector('.gameGrid');
 
 cardButton.addEventListener('click', e => {
     let cardName = e.target.id;
+    console.log(cardName)
     cardName = cardName.replace("div", "") //Doesn't matter if div or image is chosen; referred to by image now
     //Don't do anything if the click is disabled or already flipped
 
@@ -125,18 +160,19 @@ cardButton.addEventListener('click', e => {
     console.log(indexForImage)
     
     let imageName = cardNameCorrelation[indexForImage] 
-    console.log(imageName)
     //Note: e.target.id will be card + number. Get the image that correlates to the card's index in the cardNameCorrelationArray
     //check which side card is
-    console.log(e.target.id)
     
     //if cardName is div and not img, then you need to change to get query selector 
     
+    console.log(cardSrc)
     let testDiv = e.target.id;
+    /*
     if (testDiv.slice(0, 3) == "div") { //not detecting it as a div
         cardSrc = cardSrc.querySelector("img");
         console.log("oofykins")
-    }
+    }*/
+    console.log(cardSrc)
     cardSrc.src = imageName
     /*flips either way, probably no need
     if (cardSrc.getAttribute("src") == imageName) {
@@ -146,7 +182,7 @@ cardButton.addEventListener('click', e => {
     cardSrc.src = imageName
     }
 */
-console.log(cardSrc.getAttribute("src"))
+    console.log(cardSrc.getAttribute("src"))
 
 
 
@@ -195,6 +231,12 @@ function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc) {
         
     }
 }
+
+})
+
+
+
+
 
 
 //when a card is clicked. 

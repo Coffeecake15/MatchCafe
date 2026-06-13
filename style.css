@@ -13,6 +13,25 @@ body {
   
 }
 
+
+#openingScreen {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;     
+  min-height: 100px; 
+  min-width: auto;
+  max-height: 80vh;
+  max-width: 1000vh;
+  margin: 0;
+  padding-top: 10px;   
+}
+
+.playButtons {
+  margin-bottom: 10px;
+  width: 10%;
+}
+
 #outerDiv {
   display: flex;
   flex-direction: column; 
@@ -23,14 +42,30 @@ body {
   max-height: 80vh;
   max-width: 1000vh;
   margin: 0;
-  padding-top: 10px;    
+  padding-top: 10px;   
 }
 
 #pointsDiv {
   display: block;
   position: fixed;
   margin: 0;
-  top: 80%;
+  top: 90%;
+}
+
+#headerDiv {
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+}
+
+#titleMem {
+  font-size: 30px;
+}
+
+#countdownTimer {
+  position: fixed;
+  font-size: 30px;
+  right: 10%;
 }
 
 .gameGrid {
