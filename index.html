@@ -8,22 +8,25 @@
 </head>
 <body>    
 
-  <div id = "openingScreen">
+  <div class = "screen" id = "openingScreen" style = "display: flex">
     <h1>MatchCafe</h1>
     <input type="button" class = "playButtons" id = "easyButton" src="Card_Images/bro.png"> <!--draw play-->
     <input type="button" class = "playButtons" id = "mediumButton" src="Card_Images/bro.png">
     <input type="button" class = "playButtons" id = "hardButton" src="Card_Images/bro.png">
+  <h2 id = "highScoreDisplay"></h2>
+  <button onclick = "removeScore()">Remove my score</button> <!--Test button for removing score-->
   </div>
 
   <div class = "screen" id="gameScreen" style = "display: none">
-
-
     <div id = "headerDiv"> 
       <p id = "titleMem"></p>
       <p id ="countdownTimer">100</p>
+      <button id="instantFinish" >Finish this stupid game</button>
     </div>
 
+    <!--OUTER VID-->
       <div id = "outerDiv">
+        <!--GAMEBOARD VID-->
       <div class="gameGrid" id ="divBoard">
         <div class="card-in-grid" id = "divcard1">
           <img id = "card1" src="Card_Images/bro.png"  class = "backSize">
@@ -83,12 +86,27 @@
         </div>
       
       </div>
+<!--GAMEBOARD VID-->
+
+
+
+
       
     <div id = "pointsDiv">
       <h1 id="pointCounter">points: </h1>
+      <input id = "goBackButton" type = "button" src = "Card_Images/memImage1-1.png"> <!--Go back-->
     </div>
-  </div>
 
+    </div>
+<!--OUTER DIV-->
+</div>
+<!--GAMESCREEEN DIV-->
+
+  <div id ="endScreen" style = "display: none">
+    <h1>Game Over</h1>
+    <p id="endScoreShow"></p>
+    <button id="goHomeEnd">Go Home</button>
+  </div>
 
 
     <script src="script.js"></script>

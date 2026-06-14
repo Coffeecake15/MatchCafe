@@ -24,7 +24,8 @@ body {
   max-height: 80vh;
   max-width: 1000vh;
   margin: 0;
-  padding-top: 10px;   
+  padding-top: 10px;  
+  background-color: aqua; 
 }
 
 .playButtons {
@@ -81,6 +82,14 @@ body {
 
 }
 
+#goBackButton {
+  display: block;
+  position: fixed;
+  margin: 0;
+  left: 30%;
+  top: 93%;
+}
+
 .card-in-grid{
   display: flex;
   background-color: #3498db;
@@ -98,4 +107,18 @@ body {
 
 .backSize {
   width: 100%;
+}
+
+#endScreen {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;     
+  min-height: 100px; 
+  min-width: auto;
+  max-height: 80vh;
+  max-width: 1000vh;
+  margin: 0;
+  padding-top: 10px;  
+  background-color: blue;
 }

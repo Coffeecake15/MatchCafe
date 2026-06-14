@@ -23,19 +23,58 @@ let firstCard;
 let firstCardSrc;
 let timerDisplay = document.getElementById("countdownTimer");
 let timeLeft;
+let highScoreDisplay = document.getElementById("highScoreDisplay");
+let showScoreEnd = document.getElementById("endScoreShow")
 
 let openingScreen = document.getElementById("openingScreen");
 let gameScreen = document.getElementById("gameScreen")
+let endScreen = document.getElementById("endScreen")
 
-let playButtons = document.querySelector(".playButtons");
+//Add some event listeners for buttons
+document.getElementById("goBackButton").addEventListener('click', goHome)
+document.getElementById("goHomeEnd").addEventListener('click', goHome)
+document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
 
+console.log(localStorage.getItem("usersHighestScore"))
+
+ //if user has played before, show their highest score
+if (localStorage.getItem("usersHighestScore") != null) {
+    highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
+}
+
+function removeScore() { //for testing purposes, clear out your score and reload
+    localStorage.clear();
+}
+
+function goHome() {
+    console.log("cllick")
+    endScreen.style.display = "flex";
+    openingScreen.style.display = "flex"
+    gameScreen.style.display = "none"
+    endScreen.style.display = "none"
+    highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
+}
+
+function finishThisStupidGame() { //Instant finish for the sake of testing
+    gameScreen.style.display = "none";
+    endScreen.style.display = "flex";
+    showScoreEnd.innerHTML = points;
+    if (localStorage.getItem("usersHighestScore") == null || localStorage.getItem("usersHighestScore") < points) {
+        localStorage.setItem("usersHighestScore", points)
+    }
+}
+
+
+//AFTER STARTING GAME//
 openingScreen.addEventListener('click', e => {
     if (e.target.id == "easyButton") {
         timeLeft = 120;
     } else if (e.target.id == "mediumButton") {
         timeLeft = 90;
     } else if (e.target.id == "hardButton") {
-        timeLeft = 60;
+        timeLeft = 3;
+    } else {
+        return
     }
 
     console.log(e.target.id)
@@ -123,6 +162,7 @@ const clockCountdown = setInterval(() => {
         timerDisplay.innerHTML = timeLeft;
         if (timeLeft == 0) {
             clearInterval(clockCountdown)
+            finishThisStupidGame();
         }
         }, 1000);
     
