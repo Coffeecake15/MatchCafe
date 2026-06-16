@@ -22,6 +22,7 @@
       <p id = "titleMem"></p>
       <p id ="countdownTimer">100</p>
       <button id="instantFinish" >Finish this stupid game</button>
+      <button id="quickMatch" onclick = "quickMatch()">Match cheat for testing</button>
     </div>
 
     <!--OUTER VID-->
@@ -103,7 +104,8 @@
 <!--GAMESCREEEN DIV-->
 
   <div id ="endScreen" style = "display: none">
-    <h1>Game Over</h1>
+    <h1 id = "timeoutScreen">Game Over</h1>
+    <h1 id = "fullscoreScreen" style = "display: none">Great Job!</h1>
     <p id="endScoreShow"></p>
     <button id="goHomeEnd">Go Home</button>
   </div>

@@ -10,7 +10,7 @@ body {
   -moz-user-select: none;      /* Old versions of Firefox */
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;           /* Modern browsers (Chrome, Edge, Firefox, Opera) */
-  
+  overflow: hidden; 
 }
 
 
@@ -19,12 +19,12 @@ body {
   flex-direction: column; 
   justify-content: center; 
   align-items: center;     
-  min-height: 100px; 
+  min-height: 1000px; 
   min-width: auto;
   max-height: 80vh;
   max-width: 1000vh;
   margin: 0;
-  padding-top: 10px;  
+
   background-color: aqua; 
 }
 
@@ -141,5 +141,5 @@ body {
   max-width: 1000vh;
   margin: 0;
   padding-top: 10px;  
-  background-color: blue;
+  background-color: rgb(154, 154, 193);
 }

@@ -18,7 +18,10 @@ This allows random images to be chosen based on a random number assortment.
 let isSecondClick = false;
 let disableClick = true;
 let points = 0;
+let matches = 0;
+let pointInterval; //increases how many points earned depending on difficulty
 let pointDisplay = document.getElementById("pointCounter");
+
 let firstCard;
 let firstCardSrc;
 let timerDisplay = document.getElementById("countdownTimer");
@@ -58,7 +61,16 @@ function goHome() {
 function finishThisStupidGame() { //Instant finish for the sake of testing
     gameScreen.style.display = "none";
     endScreen.style.display = "flex";
-    showScoreEnd.innerHTML = points;
+    let i = 0;
+    const countUpDisplay = setInterval(() => {
+        i++;
+        showScoreEnd.innerHTML = i;
+        if (i == points) {
+            clearInterval(countUpDisplay) //Make little ding ding sound?
+        }
+
+        }, 50);
+
     if (localStorage.getItem("usersHighestScore") == null || localStorage.getItem("usersHighestScore") < points) {
         localStorage.setItem("usersHighestScore", points)
     }
@@ -68,11 +80,14 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
 //AFTER STARTING GAME//
 openingScreen.addEventListener('click', e => {
     if (e.target.id == "easyButton") {
+        pointInterval = 10;
         timeLeft = 120;
     } else if (e.target.id == "mediumButton") {
+        pointInterval = 15;
         timeLeft = 90;
     } else if (e.target.id == "hardButton") {
-        timeLeft = 3;
+        pointInterval = 20;
+        timeLeft = 30;
     } else {
         return
     }
@@ -163,8 +178,21 @@ const clockCountdown = setInterval(() => {
         timerDisplay.innerHTML = timeLeft;
         if (timeLeft == 0) {
             clearInterval(clockCountdown)
+            document.getElementById("fullscoreScreen").style.display = "none"
+            document.getElementById("timeoutScreen").style.display = "block"
+            finishThisStupidGame();
+            
+        }
+
+        if (matches == 9) {
+            clearInterval(clockCountdown)
+            document.getElementById("fullscoreScreen").style.display = "block"
+            document.getElementById("timeoutScreen").style.display = "none"
             finishThisStupidGame();
         }
+
+        //if all matches, show fullscorescreen and hide timeout, and finishthisstupdi game
+
         }, 1000);
     
 
@@ -270,7 +298,8 @@ function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc, firstCar
     divRefForFlip2 = document.getElementById(divRefForFlip2)
     if (firstCard.at(firstCard.length - 1) 
         == secondCard.at(secondCard.length - 1)) { //if the last numbers match, it's a match! yipee!
-        points++;
+        points += pointInterval
+        matches++
         takenCards.push();
         pointDisplay.innerHTML = "Points: " + points
         //make this update automaticallY? idk
@@ -287,6 +316,10 @@ function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc, firstCar
 }
 
 })
+
+function quickMatch(){ 
+    matches = 9;
+}
 
 function turnOnFlip(cardToFlip, card, name) {
     cardToFlip.classList.add("card-flip")
