@@ -80,6 +80,7 @@ body {
   background-color: white;
   box-sizing: border-box;
 
+
 }
 
 #goBackButton {
@@ -92,21 +93,41 @@ body {
 
 .card-in-grid{
   display: flex;
-  background-color: #3498db;
+  background-color: #ffffff;
+  border-color: black;
+  border-style: solid;
   min-height: auto;
   width: 100%;
   aspect-ratio: 1/1.4;
   color: white;
-  padding: 10px;
   text-align: center;
   box-sizing: border-box;
   justify-content: center; 
   align-items: center;   
-  
+
 }
+
+.card-flip {
+  animation: cardFlip .2s ease-out;
+  transform-style: preserve-3d;
+}
+
+.card-flip-over {
+  animation: cardFlipover .2s;
+  transform-style: preserve-3d;
+}
+
+@keyframes cardFlip {
+  90% {transform: rotateY(90deg)};
+}
+
+
 
 .backSize {
   width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
 }
 
 #endScreen {

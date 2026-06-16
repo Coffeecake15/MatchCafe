@@ -153,6 +153,7 @@ for (let i = 1; i < 19; i++) {
 setTimeout(() => {
   for (let i = 1; i < 19; i++) {
     document.getElementById("card" + i).src = "Card_Images/bro.png";
+    
     disableClick = false;
 }
 }, 2000);
@@ -178,6 +179,8 @@ cardButton.addEventListener('click', e => {
     console.log(cardName)
     cardName = cardName.replace("div", "") //Doesn't matter if div or image is chosen; referred to by image now
     //Don't do anything if the click is disabled or already flipped
+    //create a div reference to add the flip class to. 
+    let divRefForFlip = "div" + cardName;
 
     if (disableClick
         || document.getElementById(cardName).getAttribute("src") != "Card_Images/bro.png"
@@ -188,6 +191,7 @@ cardButton.addEventListener('click', e => {
     
     console.log(e.target.id)
     let cardSrc = document.getElementById(cardName);
+    divRefForFlip = document.getElementById(divRefForFlip);
     
 
 
@@ -213,7 +217,12 @@ cardButton.addEventListener('click', e => {
         console.log("oofykins")
     }*/
     console.log(cardSrc)
-    cardSrc.src = imageName
+    turnOnFlip(divRefForFlip, cardSrc, imageName)
+    
+
+
+   // divRefForFlip.classList.remove("card-flip")
+
     /*flips either way, probably no need
     if (cardSrc.getAttribute("src") == imageName) {
         cardSrc.src = "Card_Images/bro.png"
@@ -229,12 +238,13 @@ cardButton.addEventListener('click', e => {
         //Checks if this is the match card. 
 
     if (isSecondClick) {
-        checkMatch(firstCard, imageName, firstCardSrc, cardSrc);
+        checkMatch(firstCard, imageName, firstCardSrc, cardSrc, firstCardName, cardName);
         //this is the second match. time to calculate things!
         isSecondClick = false;
 
     } else {
         firstCard = imageName;
+        firstCardName = cardName;
         firstCardSrc = cardSrc;
         isSecondClick = true;
     }
@@ -249,12 +259,15 @@ cardButton.addEventListener('click', e => {
 })
 
 
-
-function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc) {
+function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc, firstCardName, cardName) {
     console.log(firstCard)
     console.log(secondCard)
     firstCard = firstCard.replace(".png", "")
     secondCard = secondCard.replace(".png", "")
+    let divRefForFlip1 = "div" + firstCardName;
+    divRefForFlip1 = document.getElementById(divRefForFlip1)
+    let divRefForFlip2 = "div" + cardName;
+    divRefForFlip2 = document.getElementById(divRefForFlip2)
     if (firstCard.at(firstCard.length - 1) 
         == secondCard.at(secondCard.length - 1)) { //if the last numbers match, it's a match! yipee!
         points++;
@@ -264,9 +277,10 @@ function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc) {
     } else {
         disableClick = true;
         setTimeout(() => {
-            firstCardSrc.src = "Card_Images/bro.png";
-            secondCardSrc.src = "Card_Images/bro.png";
+            turnOnFlip(divRefForFlip1, firstCardSrc, "Card_Images/bro.png")
+            turnOnFlip(divRefForFlip2, secondCardSrc, "Card_Images/bro.png")
             disableClick = false;
+
         }, 2000);
         
     }
@@ -274,7 +288,18 @@ function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc) {
 
 })
 
+function turnOnFlip(cardToFlip, card, name) {
+    cardToFlip.classList.add("card-flip")
 
+    setTimeout(() => {
+        card.src = name 
+     }, 150);
+
+    setTimeout(() => {
+        cardToFlip.classList.remove("card-flip")
+
+    }, 1000);
+}
 
 
 
