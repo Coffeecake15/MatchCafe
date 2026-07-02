@@ -11,6 +11,8 @@ body {
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;           /* Modern browsers (Chrome, Edge, Firefox, Opera) */
   overflow: hidden; 
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -21,16 +23,41 @@ body {
   align-items: center;     
   min-height: 1000px; 
   min-width: auto;
-  max-height: 80vh;
-  max-width: 1000vh;
+  max-height: 100%;
+  max-width: auto;
   margin: 0;
+  background-image: url("matchcafescreen1.png");
+  background-size: cover;
+  overflow: hidden; 
 
-  background-color: aqua; 
 }
 
-.playButtons {
-  margin-bottom: 10px;
-  width: 10%;
+#loadScreen {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;     
+  min-height: 1000px; 
+  min-width: auto;
+  max-height: 100%;
+  max-width: auto;
+  margin: 0;
+  background-color: black;
+  overflow: hidden; 
+}
+
+@font-face {
+  font-family: "ShortStack";
+  src: url(ShortStack-Regular.ttf);
+}
+
+#highScoreDisplay {
+  color:#ffffff;
+  font-family: 'ShortStack';
+} 
+
+.playButtons{ 
+
 }
 
 #outerDiv {
@@ -69,6 +96,21 @@ body {
   right: 10%;
 }
 
+#gameScreen{
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;     
+  min-height: 1000px; 
+  min-width: auto;
+  max-height: 100%;
+  max-width: auto;
+  margin: 0;
+  overflow: hidden; 
+  background-image: url("screen2.png");
+  background-size: cover;
+}
+
 .gameGrid {
   display: grid;
   min-height: 50%;
@@ -77,10 +119,7 @@ body {
   max-height: 60vh;
   grid-template-columns: repeat(6, 5fr); 
   gap: 2%; 
-  background-color: white;
   box-sizing: border-box;
-
-
 }
 
 #goBackButton {
@@ -94,8 +133,7 @@ body {
 .card-in-grid{
   display: flex;
   background-color: #ffffff;
-  border-color: black;
-  border-style: solid;
+  border-radius: 25px;
   min-height: auto;
   width: 100%;
   aspect-ratio: 1/1.4;
@@ -104,6 +142,7 @@ body {
   box-sizing: border-box;
   justify-content: center; 
   align-items: center;   
+  box-shadow: 0 2px 10px  rgb(40, 34, 34);
 
 }
 
@@ -128,6 +167,7 @@ body {
   height: 100%;
   object-fit: fill;
   display: block;
+  -webkit-user-drag: none;
 }
 
 #endScreen {

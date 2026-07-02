@@ -9,10 +9,9 @@
 <body>    
 
   <div class = "screen" id = "openingScreen" style = "display: flex">
-    <h1>MatchCafe</h1>
-    <input type="button" class = "playButtons" id = "easyButton" src="Card_Images/bro.png"> <!--draw play-->
-    <input type="button" class = "playButtons" id = "mediumButton" src="Card_Images/bro.png">
-    <input type="button" class = "playButtons" id = "hardButton" src="Card_Images/bro.png">
+    <img class = "playButtons" id = "easyButton" src="play_buttons/easy_button.png"> <!--draw play-->
+    <img class = "playButtons" id = "mediumButton" src="play_buttons/medium_button.png">
+    <img class = "playButtons" id = "hardButton" src="play_buttons/hard_button.png">
   <h2 id = "highScoreDisplay"></h2>
   <button onclick = "removeScore()">Remove my score</button> <!--Test button for removing score-->
   </div>
@@ -103,10 +102,12 @@
 </div>
 <!--GAMESCREEEN DIV-->
 
+<div class = "screen" id = "loadScreen" style = "display: none"></div>
   <div id ="endScreen" style = "display: none">
     <h1 id = "timeoutScreen">Game Over</h1>
     <h1 id = "fullscoreScreen" style = "display: none">Great Job!</h1>
     <p id="endScoreShow"></p>
+    <p id="newHighScore"></p>
     <button id="goHomeEnd">Go Home</button>
   </div>
 
