@@ -102,16 +102,26 @@
 </div>
 <!--GAMESCREEEN DIV-->
 
+<!--Loading screen?
 <div class = "screen" id = "loadScreen" style = "display: none"></div>
+-->
   <div id ="endScreen" style = "display: none">
-    <h1 id = "timeoutScreen">Game Over</h1>
+    <!--<h1 id = "timeoutScreen">Game Over</h1>-->
+
     <h1 id = "fullscoreScreen" style = "display: none">Great Job!</h1>
-    <p id="endScoreShow"></p>
+    <p id="endScoreShow">bruh</p>
     <p id="newHighScore"></p>
-    <button id="goHomeEnd">Go Home</button>
+    <img src ="homebutton.png" class="screenButtons" id="goHomeEnd">
+    <img src="clickHeretoDonate.png" class="screenButtons" id="donationButton">
+    <!--<button id="goHomeEndOof">Go Home</button>-->
   </div>
 
-
+<div id ="allAudio">
+   <audio id="clickSound" class="sfx" src="Audio/Clicking Sound.mp3"></audio>
+   <audio id="cardFlip" class="sfx" src="Audio/card flip.mp3"></audio>
+   <audio id="pointsSFX" class="sfx" src="Audio/pointsclimbing.mp3"></audio>
+   <audio id="celebration" class="sfx" src="Audio/celebrationHorn.mp3"></audio>
+</div>
     <script src="script.js"></script>
 </body>
 </html>

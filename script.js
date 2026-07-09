@@ -20,18 +20,29 @@ let disableClick = true;
 let points = 0;
 let matches = 0;
 let pointInterval; //increases how many points earned depending on difficulty
-let pointDisplay = document.getElementById("pointCounter");
+
 
 let firstCard;
 let firstCardSrc;
-let timerDisplay = document.getElementById("countdownTimer");
 let timeLeft;
+
+/*ONSCREEN DISPLAYS*/
+let timerDisplay = document.getElementById("countdownTimer");
 let highScoreDisplay = document.getElementById("highScoreDisplay");
 let showScoreEnd = document.getElementById("endScoreShow")
+let pointDisplay = document.getElementById("pointCounter");
 
+/*SCREENS*/
 let openingScreen = document.getElementById("openingScreen");
 let gameScreen = document.getElementById("gameScreen")
 let endScreen = document.getElementById("endScreen")
+
+/*AUDIO*/
+let clickingSound = document.getElementById("clickSound");
+let flipSound = document.getElementById("cardFlip");
+const dingSound = new Audio("Audio/pointsclimbing.mp3");
+let celebration = document.getElementById("celebration");
+flipSound.volume = "0.5"
 
 let cardNameCorrelation = [] 
 let takenCards = [] //cards that already racked up points, can't click them again
@@ -84,17 +95,53 @@ function goHome() {
     highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
 }
 
+function checkLoading(container) {
+     const gameContainer = document.getElementById("outerDiv");
+    if (!gameContainer) {
+        return Promise.reject('Container element not found');
+    }
+
+    const images = Array.from(gameContainer.querySelectorAll('img'));
+    
+    if (images.length === 0) {
+        return Promise.resolve(); 
+    }
+
+
+    const promises = images.map((img) => {
+        return new Promise((resolve) => {
+        // 1. Check if the image is already loaded/cached
+        if (img.complete && img.naturalHeight !== 0) {
+            resolve();
+        } else {
+            // 2. Otherwise, listen for load or error events
+            img.addEventListener('load', () => resolve(), { once: true });
+            img.addEventListener('error', () => resolve(), { once: true }); 
+        }
+        });
+    });
+
+    return Promise.all(promises);
+    }   
+
 function finishThisStupidGame() { //Instant finish for the sake of testing
     gameScreen.style.display = "none";
     endScreen.style.display = "flex";
+    
     let highScore = localStorage.getItem("usersHighestScore");
-    let i = 0;
+    if (highScore == null) {
+        highScore = 0;
+    }
+    let i = -1;
     if (points != 0) {
         const countUpDisplay = setInterval(() => {
         i++;
+        const repDing = dingSound.cloneNode()
+        repDing.play()
         showScoreEnd.innerHTML = i;
-        if (highScore == null || i == highScore) {
-            document.getElementById("newHighScore").innerHTML = "New High Score!"
+        if (i == highScore) {
+            document.getElementById("newHighScore").innerHTML = "New High Score!" 
+            celebration.play()
         }
         if (i == points) {
             clearInterval(countUpDisplay) //Make little ding ding sound?
@@ -105,7 +152,7 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
          showScoreEnd.innerHTML = 0;
     }
     
-    if (localStorage.getItem("usersHighestScore") == null || highScore < points) {
+    if (highScore < points) {
         localStorage.setItem("usersHighestScore", points)
     }
 }
@@ -155,52 +202,20 @@ for (let i = 1; i < 19; i++) {
     cardNameCorrelation[i -1] = nameOfImage;
 }
 
-    //document.getElementById("loadScreen").style.display = "block"
    
-    function checkLoading(container) {
-        const gameContainer = document.getElementById("outerDiv");
-        if (!gameContainer) {
-            return Promise.reject('Container element not found');
-        }
-
-        const images = Array.from(gameContainer.querySelectorAll('img'));
-    
-        if (images.length === 0) {
-            return Promise.resolve(); 
-        }
 
 
-    const promises = images.map((img) => {
-        return new Promise((resolve) => {
-        // 1. Check if the image is already loaded/cached
-        if (img.complete && img.naturalHeight !== 0) {
-            resolve();
-        } else {
-            // 2. Otherwise, listen for load or error events
-            img.addEventListener('load', () => resolve(), { once: true });
-            img.addEventListener('error', () => resolve(), { once: true }); 
-        }
-        });
-    });
-
-    return Promise.all(promises);
-    }   
-
-// How to use it:
 checkLoading('divBoard').then(() => {
     startGame();
-  console.log('All images within the div have fully loaded!');
-  // Trigger your layout, animations, or calculations here
 });
 
-//console.log(cardNameCorrelation)
 //Flip to backs after exactly 2 seconds
 
 }
 
 function startGame() {
         
-    document.getElementById("loadScreen").style.display = "none"
+   // document.getElementById("loadScreen").style.display = "none"
     openingScreen.style.display = "none"
     timerDisplay.innerHTML = timeLeft;
     gameScreen.style.display = "block"
@@ -221,7 +236,7 @@ const clockCountdown = setInterval(() => {
             clearInterval(clockCountdown)
             setTimeout(() => {
                 document.getElementById("fullscoreScreen").style.display = "none"
-                document.getElementById("timeoutScreen").style.display = "block"
+                //document.getElementById("timeoutScreen").style.display = "block"
                 finishThisStupidGame();
              }, 20)
             
@@ -231,7 +246,8 @@ const clockCountdown = setInterval(() => {
             clearInterval(clockCountdown)
             setTimeout(() => {
                 document.getElementById("fullscoreScreen").style.display = "block"
-                document.getElementById("timeoutScreen").style.display = "none"
+                endScreen.style.backgroundImage = "fullScorebackground.png"
+                //document.getElementById("timeoutScreen").style.display = "none"
                 finishThisStupidGame();
             }, 20)
             
@@ -263,11 +279,12 @@ cardButton.addEventListener('click', e => {
         return;
     } 
     
+    
     console.log(e.target.id)
     let cardSrc = document.getElementById(cardName);
     divRefForFlip = document.getElementById(divRefForFlip);
     
-
+    //flipSound.play();
 
     console.log("START")
     console.log(cardName)
@@ -291,7 +308,10 @@ cardButton.addEventListener('click', e => {
         console.log("oofykins")
     }*/
     console.log(cardSrc)
-    turnOnFlip(divRefForFlip, cardSrc, imageName)
+    checkLoading('divBoard').then(() => { //this promise (should) prevent the card from flipping with no animation
+        turnOnFlip(divRefForFlip, cardSrc, imageName)
+    });
+    
     
 
 
@@ -379,7 +399,7 @@ openingScreen.addEventListener('click', e => {
         return
     }
     
-
+    clickingSound.play();
     loadGame();
 
 
@@ -393,6 +413,7 @@ function quickMatch(){
 }
 
 function turnOnFlip(cardToFlip, card, name) {
+    flipSound.play()
     cardToFlip.classList.add("card-flip")
 
     setTimeout(() => {
