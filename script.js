@@ -15,65 +15,127 @@ This allows random images to be chosen based on a random number assortment.
 
 
 */
-let isSecondClick = false;
-let disableClick = true;
-let points = 0;
-let matches = 0;
-let pointInterval; //increases how many points earned depending on difficulty
+    let isSecondClick = false;
+    let disableClick = true;
+
+    let sfxmute = false;
+    let musicmute = false;
+
+    let points = 0;
+    let matches = 0;
+    let pointInterval; //increases how many points earned depending on difficulty
 
 
-let firstCard;
-let firstCardSrc;
-let timeLeft;
+    let firstCard;
+    let firstCardSrc;
+    let timeLeft;
 
-/*ONSCREEN DISPLAYS*/
-let timerDisplay = document.getElementById("countdownTimer");
-let highScoreDisplay = document.getElementById("highScoreDisplay");
-let showScoreEnd = document.getElementById("endScoreShow")
-let pointDisplay = document.getElementById("pointCounter");
+    /*ONSCREEN DISPLAYS*/
+    let timerDisplay = document.getElementById("countdownTimer");
+    let highScoreDisplay = document.getElementById("highScoreDisplay");
+    let showScoreEnd = document.getElementById("endScoreShow")
+    let pointDisplay = document.getElementById("pointCounter");
 
-/*SCREENS*/
-let openingScreen = document.getElementById("openingScreen");
-let gameScreen = document.getElementById("gameScreen")
-let endScreen = document.getElementById("endScreen")
+    /*SCREENS*/
+    let openingScreen = document.getElementById("openingScreen");
+    let gameScreen = document.getElementById("gameScreen")
+    let endScreen = document.getElementById("endScreen")
 
-/*AUDIO*/
-let clickingSound = document.getElementById("clickSound");
-let flipSound = document.getElementById("cardFlip");
-const dingSound = new Audio("Audio/pointsclimbing.mp3");
-let celebration = document.getElementById("celebration");
-flipSound.volume = "0.5"
+    /*AUDIO*/
+    let clickingSound = document.getElementById("clickSound");
+    let flipSound = document.getElementById("cardFlip");
+    const dingSound = new Audio("Audio/pointsclimbing.mp3");
+    dingSound.preload = "auto"
 
-let cardNameCorrelation = [] 
-let takenCards = [] //cards that already racked up points, can't click them again
-let randSet = new Set();
-let arrayOfNames = [
-    "Card_Images/memImage1-1.png", 
-    "Card_Images/memImage2-1.png",
-    "Card_Images/memImage3-2.png", 
-    "Card_Images/memImage4-2.png",
-    "Card_Images/memImage5-3.png", 
-    "Card_Images/memImage6-3.png",
-    "Card_Images/memImage7-4.png", 
-    "Card_Images/memImage8-4.png",
-    "Card_Images/memImage9-5.png", 
-    "Card_Images/memImage10-5.png",
-    "Card_Images/memImage11-6.png", 
-    "Card_Images/memImage12-6.png",
-    "Card_Images/memImage13-7.png", 
-    "Card_Images/memImage14-7.png",
-    "Card_Images/memImage15-8.png", 
-    "Card_Images/memImage16-8.png",
-    "Card_Images/memImage17-9.png",
-    "Card_Images/memImage18-9.png"
-]; 
+    const celebration = new Audio("Audio/celebrationHorn.mp3")
+    //let celebration = document.getElementById("celebration");
+    flipSound.volume = "0.5"
 
-//Add some event listeners for buttons
-document.getElementById("goBackButton").addEventListener('click', goHome)
-document.getElementById("goHomeEnd").addEventListener('click', goHome)
-document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
+    let cardNameCorrelation = [] 
+    let takenCards = [] //cards that already racked up points, can't click them again
+    let randSet = new Set();
+    let arrayOfNames = [
+        "Card_Images/memImage1-1.png", 
+        "Card_Images/memImage2-1.png",
+        "Card_Images/memImage3-2.png", 
+        "Card_Images/memImage4-2.png",
+        "Card_Images/memImage5-3.png", 
+        "Card_Images/memImage6-3.png",
+        "Card_Images/memImage7-4.png", 
+        "Card_Images/memImage8-4.png",
+        "Card_Images/memImage9-5.png", 
+        "Card_Images/memImage10-5.png",
+        "Card_Images/memImage11-6.png", 
+        "Card_Images/memImage12-6.png",
+        "Card_Images/memImage13-7.png", 
+        "Card_Images/memImage14-7.png",
+        "Card_Images/memImage15-8.png", 
+        "Card_Images/memImage16-8.png",
+        "Card_Images/memImage17-9.png",
+        "Card_Images/memImage18-9.png"
+    ]; 
 
-console.log(localStorage.getItem("usersHighestScore"))
+    //Add some event listeners for buttons
+    document.getElementById("goBackButton").addEventListener('click', goHome)
+    document.getElementById("goHomeEnd").addEventListener('click', goHome)
+    document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
+    document.getElementById("donationButton").addEventListener('click', e => {
+        clickingSound.play();
+        window.open("https://ko-fi.com/cdscoffeecake")
+    })
+    window.addEventListener('load', function() {
+        var playOnHome = document.getElementById("bgmusic");
+       playOnHome.play();
+        playOnHome.volume = .5;
+        console.log("Loaded!");
+    })
+
+    let musicButton = document.getElementById("musicButton");
+
+    musicButton.addEventListener("click", e => {
+        let bgmusic = document.getElementById("bgmusic");
+        bgmusic.muted = !bgmusic.muted;
+        console.log(!bgmusic.muted)
+        if (musicmute == false) {
+            musicButton.src = "musicmute.png"
+            musicmute = true;
+        } else {
+            musicButton.src = "music.png"
+            musicmute = false;
+        }
+  
+    })
+
+    soundButton.addEventListener("click", e => {
+        if (sfxmute == false) {
+            soundButton.src = "soundmute.png"
+            soundmute = true;
+        } else {
+            soundButton.src = "sound.png"
+            soundmute = false;
+        }
+            clickingSound.muted = !clickingSound.muted;
+            flipSound.muted = !flipSound.muted;
+            dingSound.muted = !dingSound.muted;
+            celebration.muted = !celebration.muted;
+    })
+
+    console.log(localStorage.getItem("usersHighestScore"))
+
+function origGame() {
+
+     isSecondClick = false;
+     disableClick = true;
+     points = 0;
+     matches = 0;
+
+
+    cardNameCorrelation = [] 
+    takenCards = [] //cards that already racked up points, can't click them again
+    randSet.clear
+
+} //
+
 
  //if user has played before, show their highest score
 if (localStorage.getItem("usersHighestScore") != null) {
@@ -86,13 +148,17 @@ function removeScore() { //for testing purposes, clear out your score and reload
 }
 
 function goHome() {
-    console.log("cllick")
-    window.location.reload();
-    endScreen.style.display = "flex";
-    openingScreen.style.display = "flex"
-    gameScreen.style.display = "none"
-    endScreen.style.display = "none"
-    highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
+        clickingSound.play()
+       //window.location.reload();
+    checkLoading('openingScreen').then(() => { 
+         console.log("cllick")
+        endScreen.style.display = "flex";
+        openingScreen.style.display = "flex"
+        gameScreen.style.display = "none"
+        endScreen.style.display = "none"
+        highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
+        });
+   
 }
 
 function checkLoading(container) {
@@ -134,22 +200,66 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
     }
     let i = -1;
     if (points != 0) {
-        const countUpDisplay = setInterval(() => {
-        i++;
-        const repDing = dingSound.cloneNode()
-        repDing.play()
-        showScoreEnd.innerHTML = i;
-        if (i == highScore) {
-            document.getElementById("newHighScore").innerHTML = "New High Score!" 
-            celebration.play()
-        }
-        if (i == points) {
-            clearInterval(countUpDisplay) //Make little ding ding sound?
+
+        /*
+        function animate() {
+            i++;
+            //const repDing = dingSound.cloneNode()
+            //const dingSound = new Audio("Audio/pointsclimbing.mp3");
+           // dingSound.currentTime = 0;  
+            audioArray[i % 10].play() //audio seems to be causing the problem
+            
+            
+            showScoreEnd.textContent = i;
+            if (i == highScore) {
+                document.getElementById("newHighScore").innerHTML = "New High Score!" 
+                celebration.play()
+            }
+             if (i == points) {
+                repDing.addEventListener('ended', () => {
+                repDing.remove();
+        });
+                //clearInterval(countUpDisplay) //Make little ding ding sound?
+            } else {
+                 requestAnimationFrame(animate);
+            }
         }
 
-        }, 50);
+        requestAnimationFrame(animate);
+
+
+        */
+       //do I do animation or frames?
+        scoreClimb()
+        function scoreClimb() {
+            i++;
+            const repDing = dingSound.cloneNode()
+            //const dingSound = new Audio("Audio/pointsclimbing.mp3");
+           // dingSound.currentTime = 0;  
+            repDing.play() //audio seems to be causing the problem
+            repDing.addEventListener('ended', () => {
+                 repDing.remove();
+            });
+            
+            showScoreEnd.textContent = i;
+            if (i == highScore) {
+                document.getElementById("newHighScore").innerHTML = "New High Score!" 
+                celebration.play()
+            }
+             if (i == points) {
+                
+                //clearInterval(countUpDisplay) //Make little ding ding sound?
+            } else {
+                 setTimeout(scoreClimb, 70);
+            }
+        }
+
+        
+
+
+        
     } else {
-         showScoreEnd.innerHTML = 0;
+         showScoreEnd.textContent = 0;
     }
     
     if (highScore < points) {
@@ -265,6 +375,7 @@ let cardButton = document.querySelector('.gameGrid');
 
 
 cardButton.addEventListener('click', e => {
+    console.log(isSecondClick)
     let cardName = e.target.id;
     console.log(cardName)
     cardName = cardName.replace("div", "") //Doesn't matter if div or image is chosen; referred to by image now
@@ -398,7 +509,7 @@ openingScreen.addEventListener('click', e => {
     } else {
         return
     }
-    
+    origGame()
     clickingSound.play();
     loadGame();
 

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport, color-scheme" content=""content="width=device-width, initial-scale=1.0, viewport-fit=cover, dark light" />
+
     <title>My Web Page</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,7 +13,9 @@
     <img class = "playButtons" id = "easyButton" src="play_buttons/easy_button.png"> <!--draw play-->
     <img class = "playButtons" id = "mediumButton" src="play_buttons/medium_button.png">
     <img class = "playButtons" id = "hardButton" src="play_buttons/hard_button.png">
-  <h2 id = "highScoreDisplay"></h2>
+    <img id="musicButton" src="music.png">
+    <img id="soundButton" src="sound.png">
+    <h2 id = "highScoreDisplay"></h2>
   <button onclick = "removeScore()">Remove my score</button> <!--Test button for removing score-->
   </div>
 
@@ -109,7 +112,7 @@
     <!--<h1 id = "timeoutScreen">Game Over</h1>-->
 
     <h1 id = "fullscoreScreen" style = "display: none">Great Job!</h1>
-    <p id="endScoreShow">bruh</p>
+    <p id="endScoreShow"></p>
     <p id="newHighScore"></p>
     <img src ="homebutton.png" class="screenButtons" id="goHomeEnd">
     <img src="clickHeretoDonate.png" class="screenButtons" id="donationButton">
@@ -121,6 +124,7 @@
    <audio id="cardFlip" class="sfx" src="Audio/card flip.mp3"></audio>
    <audio id="pointsSFX" class="sfx" src="Audio/pointsclimbing.mp3"></audio>
    <audio id="celebration" class="sfx" src="Audio/celebrationHorn.mp3"></audio>
+   <audio id="bgmusic" src="Audio/Bluesy Vibes - Doug Maxwell_Media Right Productions.mp3"></audio>
 </div>
     <script src="script.js"></script>
 </body>

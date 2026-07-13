@@ -1,3 +1,7 @@
+:root {
+  color-scheme: dark light
+}
+
 html {
     height: 100%;
     position: relative;
@@ -58,6 +62,30 @@ body {
 
 .playButtons{ 
 
+}
+
+#musicButton {
+  width: 20vh;
+  position: fixed;
+  display: flex;
+  left: 10%;
+  top: 30%;
+}
+
+#musicButton:hover {
+    transform: scale(1.1);
+}
+
+#soundButton {
+  width: 20vh;
+  position: fixed;
+  display: flex;
+  left: 20%;
+  top: 27.5%;
+}
+
+#soundButton:hover {
+    transform: scale(1.1);
 }
 
 .playButtons:hover {
@@ -210,11 +238,24 @@ body {
 }
 
 #endScoreShow {
-  color: #ffffff;
+  position: absolute;
+  font-style: oblique;
+  color: #ece3e3;
+  top: 35%;
+  right: 48%;
+  font-family: "ShortStack";
+  font-size: 50px;
+  padding-right: 0.2em; 
+  padding-left: 0.2em;
 }
 
 #newHighScore {
-  color:#ffffff;
+  position: absolute;
+  color:#f0efe7;
+  top: 45%;
+  right: 44%;
+  font-family: "ShortStack";
+  font-size: 30px;
 }
 
 #donationButton {
