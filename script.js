@@ -17,6 +17,7 @@ This allows random images to be chosen based on a random number assortment.
 */
     let isSecondClick = false;
     let disableClick = true;
+    let clearout = false;
 
     let sfxmute = false;
     let musicmute = false;
@@ -46,10 +47,12 @@ This allows random images to be chosen based on a random number assortment.
     let flipSound = document.getElementById("cardFlip");
     const dingSound = new Audio("Audio/pointsclimbing.mp3");
     dingSound.preload = "auto"
-
     const celebration = new Audio("Audio/celebrationHorn.mp3")
     //let celebration = document.getElementById("celebration");
     flipSound.volume = "0.5"
+    const backgroundMusic = document.getElementById("bgmusic");
+    const isPlaying = !backgroundMusic.ended && backgroundMusic.currentTime > 0;
+    let autoplayOn = true;
 
     let cardNameCorrelation = [] 
     let takenCards = [] //cards that already racked up points, can't click them again
@@ -79,29 +82,45 @@ This allows random images to be chosen based on a random number assortment.
     document.getElementById("goBackButton").addEventListener('click', goHome)
     document.getElementById("goHomeEnd").addEventListener('click', goHome)
     document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
+    document.getElementById("instantFinish").addEventListener('click', clearingout);
     document.getElementById("donationButton").addEventListener('click', e => {
         clickingSound.play();
         window.open("https://ko-fi.com/cdscoffeecake")
     })
     window.addEventListener('load', function() {
-        var playOnHome = document.getElementById("bgmusic");
-       playOnHome.play();
-        playOnHome.volume = .5;
-        console.log("Loaded!");
+
+        async function checkAutoplay() {
+        try {
+            await backgroundMusic.play();
+            backgroundMusic.volume = .5;
+        } catch (error) {
+            backgroundMusic.muted = true;
+            musicmute = true;
+            musicButton.src = "musicmute.png"
+        }
+        }
+        
+        checkAutoplay();
+
     })
 
     let musicButton = document.getElementById("musicButton");
 
+    function clearingout() {
+        clearout = true;
+    }
+
     musicButton.addEventListener("click", e => {
-        let bgmusic = document.getElementById("bgmusic");
-        bgmusic.muted = !bgmusic.muted;
-        console.log(!bgmusic.muted)
+        backgroundMusic.muted = !backgroundMusic.muted;
+        console.log(!backgroundMusic.muted)
         if (musicmute == false) {
             musicButton.src = "musicmute.png"
             musicmute = true;
         } else {
+            backgroundMusic.volume = .5;
             musicButton.src = "music.png"
             musicmute = false;
+            backgroundMusic.play();
         }
   
     })
@@ -116,23 +135,30 @@ This allows random images to be chosen based on a random number assortment.
         }
             clickingSound.muted = !clickingSound.muted;
             flipSound.muted = !flipSound.muted;
-            dingSound.muted = !dingSound.muted;
+            dingSound.muted = !dingSound.muted; //still makes noises because of clones!
             celebration.muted = !celebration.muted;
     })
 
-    console.log(localStorage.getItem("usersHighestScore"))
+    console.log(localStorage.getItem("usersssHighestScore"))
 
 function origGame() {
 
+    //Set variables to their original values
      isSecondClick = false;
      disableClick = true;
      points = 0;
      matches = 0;
+     clearout = false;
+
+     //Remove repeat event listeners
 
 
+
+    //Remove arrays and sets
     cardNameCorrelation = [] 
     takenCards = [] //cards that already racked up points, can't click them again
-    randSet.clear
+    randSet.clear();
+    console.log(matches)
 
 } //
 
@@ -149,7 +175,7 @@ function removeScore() { //for testing purposes, clear out your score and reload
 
 function goHome() {
         clickingSound.play()
-       //window.location.reload();
+        //window.location.reload();
     checkLoading('openingScreen').then(() => { 
          console.log("cllick")
         endScreen.style.display = "flex";
@@ -247,7 +273,7 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
                 celebration.play()
             }
              if (i == points) {
-                
+                 repDing.remove();
                 //clearInterval(countUpDisplay) //Make little ding ding sound?
             } else {
                  setTimeout(scoreClimb, 70);
@@ -299,6 +325,7 @@ you can slice off the end of the string name
 let index = 0;
 while (randSet.size < 18) {
     let randNumber = Math.floor(Math.random() * 18)
+    console.log("randomTime!")
     randSet.add(randNumber)
 }
 
@@ -324,7 +351,7 @@ checkLoading('divBoard').then(() => {
 }
 
 function startGame() {
-        
+
    // document.getElementById("loadScreen").style.display = "none"
     openingScreen.style.display = "none"
     timerDisplay.innerHTML = timeLeft;
@@ -347,6 +374,7 @@ const clockCountdown = setInterval(() => {
             setTimeout(() => {
                 document.getElementById("fullscoreScreen").style.display = "none"
                 //document.getElementById("timeoutScreen").style.display = "block"
+                cardButton.removeEventListener('click', buttonCheck)
                 finishThisStupidGame();
              }, 20)
             
@@ -358,9 +386,14 @@ const clockCountdown = setInterval(() => {
                 document.getElementById("fullscoreScreen").style.display = "block"
                 endScreen.style.backgroundImage = "fullScorebackground.png"
                 //document.getElementById("timeoutScreen").style.display = "none"
+                cardButton.removeEventListener('click', buttonCheck)
                 finishThisStupidGame();
             }, 20)
             
+        }
+        if (clearout == true) {
+            cardButton.removeEventListener('click', buttonCheck)
+            clearInterval(clockCountdown);
         }
 
         //if all matches, show fullscorescreen and hide timeout, and finishthisstupdi game
@@ -372,10 +405,10 @@ let cardButton = document.querySelector('.gameGrid');
 
 //Card button click
 
-
-
-cardButton.addEventListener('click', e => {
-    console.log(isSecondClick)
+function buttonCheck(e) {
+    console.log("FUNCTION CALL!!!")    
+    console.log("Is this the second click?" + isSecondClick)
+    console.log("is clicking disabled? "+ disableClick)
     let cardName = e.target.id;
     console.log(cardName)
     cardName = cardName.replace("div", "") //Doesn't matter if div or image is chosen; referred to by image now
@@ -397,13 +430,9 @@ cardButton.addEventListener('click', e => {
     
     //flipSound.play();
 
-    console.log("START")
-    console.log(cardName)
-    console.log(cardNameCorrelation)
     
     let indexForImage = cardName.replace("card", "")
     indexForImage = indexForImage - 1;
-    console.log(indexForImage)
     
     let imageName = cardNameCorrelation[indexForImage] 
     //Note: e.target.id will be card + number. Get the image that correlates to the card's index in the cardNameCorrelationArray
@@ -411,14 +440,13 @@ cardButton.addEventListener('click', e => {
     
     //if cardName is div and not img, then you need to change to get query selector 
     
-    console.log(cardSrc)
     let testDiv = e.target.id;
     /*
     if (testDiv.slice(0, 3) == "div") { //not detecting it as a div
         cardSrc = cardSrc.querySelector("img");
         console.log("oofykins")
     }*/
-    console.log(cardSrc)
+
     checkLoading('divBoard').then(() => { //this promise (should) prevent the card from flipping with no animation
         turnOnFlip(divRefForFlip, cardSrc, imageName)
     });
@@ -436,7 +464,6 @@ cardButton.addEventListener('click', e => {
     cardSrc.src = imageName
     }
 */
-    console.log(cardSrc.getAttribute("src"))
 
 
 
@@ -460,21 +487,21 @@ cardButton.addEventListener('click', e => {
     /*if (imageName.at()) {
     
     }*/
+}
 
-})
+
+cardButton.addEventListener('click', buttonCheck)
 
 
 function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc, firstCardName, cardName) {
-    console.log(firstCard)
-    console.log(secondCard)
+
     firstCard = firstCard.replace(".png", "")
     secondCard = secondCard.replace(".png", "")
     let divRefForFlip1 = "div" + firstCardName;
     divRefForFlip1 = document.getElementById(divRefForFlip1)
     let divRefForFlip2 = "div" + cardName;
     divRefForFlip2 = document.getElementById(divRefForFlip2)
-    console.log(firstCard.at(firstCard.length - 1))
-    console.log(secondCard.at(secondCard.length - 1))
+
     if (firstCard.at(firstCard.length - 1) 
         == secondCard.at(secondCard.length - 1)) { //if the last numbers match, it's a match! yipee!
         points += pointInterval
@@ -512,9 +539,7 @@ openingScreen.addEventListener('click', e => {
     origGame()
     clickingSound.play();
     loadGame();
-
-
-
+    console.log("matches = " + matches)
 })
 
 
