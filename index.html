@@ -16,7 +16,7 @@
     <img id="musicButton" src="music.png">
     <img id="soundButton" src="sound.png">
     <h2 id = "highScoreDisplay"></h2>
-  <button onclick = "removeScore()">Remove my score</button> <!--Test button for removing score-->
+  <button onclick = "removeScore()">Reset my score</button> <!--Test button for removing score-->
   </div>
 
   <div class = "screen" id="gameScreen" style = "display: none">
@@ -24,8 +24,9 @@
       <p id = "titleMem"></p>
       <p id ="countdownTimer">100</p>
       <button id="instantFinish" >Finish this stupid game</button>
+     <!--
       <button id="clearButton">clear</button>
-      <button id="quickMatch" onclick = "quickMatch()">Match cheat for testing</button>
+      <button id="quickMatch" onclick = "quickMatch()">Match cheat for testing</button>--> 
     </div>
 
     <!--OUTER VID-->
@@ -98,7 +99,8 @@
       
     <div id = "pointsDiv">
       <h1 id="pointCounter">points: </h1>
-      <input id = "goBackButton" type = "button" src = "Card_Images/memImage1-1.png"> <!--Go back-->
+      <!--<input id = "goBackButton" type = "button" src = "Card_Images/memImage1-1.png">-->
+       <!--Go back is above-->
     </div>
 
     </div>
@@ -112,7 +114,7 @@
   <div id ="endScreen" style = "display: none">
     <!--<h1 id = "timeoutScreen">Game Over</h1>-->
 
-    <h1 id = "fullscoreScreen" style = "display: none">Great Job!</h1>
+    <h1 id = "fullscoreScreen" style = "display: none"></h1>
     <p id="endScoreShow"></p>
     <p id="newHighScore"></p>
     <img src ="homebutton.png" class="screenButtons" id="goHomeEnd">

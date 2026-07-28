@@ -19,7 +19,7 @@ This allows random images to be chosen based on a random number assortment.
     let disableClick = true;
     let clearout = false;
 
-    let sfxmute = false;
+    let soundmute = false;
     let musicmute = false;
 
     let points = 0;
@@ -45,8 +45,9 @@ This allows random images to be chosen based on a random number assortment.
     /*AUDIO*/
     let clickingSound = document.getElementById("clickSound");
     let flipSound = document.getElementById("cardFlip");
-    const dingSound = new Audio("Audio/pointsclimbing.mp3");
-    dingSound.preload = "auto"
+    //const dingSound = new Audio("Audio/pointsclimbing.mp3");
+    let dingSoundNode = document.querySelector("#pointsSFX")
+   //dingSound.preload = "auto"
     const celebration = new Audio("Audio/celebrationHorn.mp3")
     //let celebration = document.getElementById("celebration");
     flipSound.volume = "0.5"
@@ -79,13 +80,14 @@ This allows random images to be chosen based on a random number assortment.
     ]; 
 
     //Add some event listeners for buttons
-    document.getElementById("goBackButton").addEventListener('click', goHome)
     document.getElementById("goHomeEnd").addEventListener('click', goHome)
+    //The three below are old testers
+    //document.getElementById("goBackButton").addEventListener('click', goHome)
     document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
-    document.getElementById("instantFinish").addEventListener('click', clearingout);
+    //document.getElementById("instantFinish").addEventListener('click', clearingout);
     document.getElementById("donationButton").addEventListener('click', e => {
         clickingSound.play();
-        window.open("https://ko-fi.com/cdscoffeecake")
+        window.open("https://ko-fi.com/cdscoffeecake", "_black")
     })
     window.addEventListener('load', function() {
 
@@ -103,6 +105,71 @@ This allows random images to be chosen based on a random number assortment.
         checkAutoplay();
 
     })
+
+    window.addEventListener("load", init)
+
+
+//sound figuring out
+// figuring out sound
+    let dingSound2 = new Audio();
+    dingSound2.src = "Audio/pointsclimbing.mp3";
+    dingSound2.controls = true;
+    //dingSound2.autoplay = true;
+
+    var context = new AudioContext();
+    var analyser = context.createAnalyser();
+
+    window.addEventListener('load', function(e) {
+    // Our <audio> element will be the audio source.
+    var source = context.createMediaElementSource(dingSoundNode);
+    source.connect(analyser);
+    analyser.connect(context.destination);
+
+    }, false);
+
+     
+        function init() {
+            try {
+             window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            var context=new AudioContext();
+            }
+            catch(e) {
+                 alert('Web Audio API is not supported in this browser');
+            }
+        }
+
+        var dingingSoundBuffer = null;
+
+        
+
+        function loadDingSound(url) {
+            var request = new XMLHttpRequest();
+            request.open('GET', url, true);
+            request.responseType = 'arraybuffer';
+
+            // Decode asynchronously
+            request.onload = function() {
+            context.decodeAudioData(request.response, function(buffer) {
+             dingingSoundBuffer = buffer;
+            }, onError);
+            }
+            request.send();
+        }
+
+        function onError() {
+            console.log("oofykins")
+        }
+
+        function playSound(buffer) {
+            var source = context.createBufferSource(); // creates a sound source
+            source.buffer = buffer;                    // tell the source which sound to play
+            source.connect(context.destination);       // connect the source to the context's destination (the speakers)
+            source.start(0);                          // play the source now
+        }
+
+        const newDing = loadDingSound("Audio/pointsclimbing.mp3");
+
+//end of sound figuring
 
     let musicButton = document.getElementById("musicButton");
 
@@ -126,7 +193,7 @@ This allows random images to be chosen based on a random number assortment.
     })
 
     soundButton.addEventListener("click", e => {
-        if (sfxmute == false) {
+        if (soundmute == false) {
             soundButton.src = "soundmute.png"
             soundmute = true;
         } else {
@@ -135,7 +202,7 @@ This allows random images to be chosen based on a random number assortment.
         }
             clickingSound.muted = !clickingSound.muted;
             flipSound.muted = !flipSound.muted;
-            dingSound.muted = !dingSound.muted; //still makes noises because of clones!
+            //dingSound.muted = !dingSound.muted; //still makes noises because of clones!
             celebration.muted = !celebration.muted;
     })
 
@@ -169,8 +236,11 @@ if (localStorage.getItem("usersHighestScore") != null) {
 }
 
 function removeScore() { //for testing purposes, clear out your score and reload
-    localStorage.clear();
-    window.location.reload();
+    if (confirm("Are you sure you want to reset your high score?")) {
+        localStorage.clear();
+        window.location.reload();
+    }
+    
 }
 
 function goHome() {
@@ -178,7 +248,7 @@ function goHome() {
         //window.location.reload();
     checkLoading('openingScreen').then(() => { 
          console.log("cllick")
-        endScreen.style.display = "flex";
+        endScreen.style.display = "none";
         openingScreen.style.display = "flex"
         gameScreen.style.display = "none"
         endScreen.style.display = "none"
@@ -225,62 +295,70 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
         highScore = 0;
     }
     let i = -1;
-    if (points != 0) {
-
-        /*
+    if (points != 0) { //change this back to 0
+        console.log("points is running")
+       
         function animate() {
             i++;
-            //const repDing = dingSound.cloneNode()
-            //const dingSound = new Audio("Audio/pointsclimbing.mp3");
-           // dingSound.currentTime = 0;  
-            audioArray[i % 10].play() //audio seems to be causing the problem
-            
-            
             showScoreEnd.textContent = i;
+            playSound(dingingSoundBuffer)
+           /* const repDing = dingSound.cloneNode()
+            if (!soundmute) {
+                repDing.play() //audio seems to be causing the problem
+                //repDing.addEventListener('ended', () => {
+                //});
+            }*/
+            
+            //WOAH IT WORKED!!!
             if (i == highScore) {
-                document.getElementById("newHighScore").innerHTML = "New High Score!" 
+                document.getElementById("newHighScore").textContent = "New High Score!" 
                 celebration.play()
             }
-             if (i == points) {
-                repDing.addEventListener('ended', () => {
-                repDing.remove();
-        });
+             if (i == 100) {
+                    //repDing.remove();
+                return;
                 //clearInterval(countUpDisplay) //Make little ding ding sound?
             } else {
-                 requestAnimationFrame(animate);
+                //repDing.remove();
+                 requestAnimationFrame(animate)
             }
         }
 
         requestAnimationFrame(animate);
 
 
-        */
+        
        //do I do animation or frames?
+       /*
+        const start = performance.now();
         scoreClimb()
         function scoreClimb() {
+
             i++;
-            const repDing = dingSound.cloneNode()
-            //const dingSound = new Audio("Audio/pointsclimbing.mp3");
-           // dingSound.currentTime = 0;  
-            repDing.play() //audio seems to be causing the problem
-            repDing.addEventListener('ended', () => {
-                 repDing.remove();
-            });
-            
             showScoreEnd.textContent = i;
+            const repDing = dingSound.cloneNode()
+            if (!soundmute) {
+                repDing.play() //audio seems to be causing the problem
+                //repDing.addEventListener('ended', () => {
+                //});
+            }
+            
             if (i == highScore) {
-                document.getElementById("newHighScore").innerHTML = "New High Score!" 
+                document.getElementById("newHighScore").textContent = "New High Score!" 
                 celebration.play()
             }
              if (i == points) {
                  repDing.remove();
+                    const end = performance.now();
+                    console.log(`Time: ${end - start} ms`);
                 //clearInterval(countUpDisplay) //Make little ding ding sound?
             } else {
-                 setTimeout(scoreClimb, 70);
+                repDing.remove();
+                setTimeout(scoreClimb, 50);
             }
         }
 
-        
+        */
 
 
         
@@ -365,7 +443,7 @@ setTimeout(() => {
     disableClick = false;
 }
 }, 2000);
-
+playSound(newDing)
 const clockCountdown = setInterval(() => {
         timeLeft--;
         timerDisplay.innerHTML = timeLeft;
