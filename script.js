@@ -83,7 +83,7 @@ This allows random images to be chosen based on a random number assortment.
     document.getElementById("goHomeEnd").addEventListener('click', goHome)
     //The three below are old testers
     //document.getElementById("goBackButton").addEventListener('click', goHome)
-    document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
+    //document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
     //document.getElementById("instantFinish").addEventListener('click', clearingout);
     document.getElementById("donationButton").addEventListener('click', e => {
         clickingSound.play();
@@ -109,12 +109,9 @@ This allows random images to be chosen based on a random number assortment.
     window.addEventListener("load", init)
 
 
-//sound figuring out
-// figuring out sound
     let dingSound2 = new Audio();
     dingSound2.src = "Audio/pointsclimbing.mp3";
     dingSound2.controls = true;
-    //dingSound2.autoplay = true;
 
     var context = new AudioContext();
     var analyser = context.createAnalyser();
@@ -167,7 +164,7 @@ This allows random images to be chosen based on a random number assortment.
             source.start(0);                          // play the source now
         }
 
-        const newDing = loadDingSound("Audio/pointsclimbing.mp3");
+        //const newDing = loadDingSound("Audio/pointsclimbing.mp3");
 
 //end of sound figuring
 
@@ -297,17 +294,14 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
     let i = -1;
     if (points != 0) { //change this back to 0
         console.log("points is running")
-       
+       /*
         function animate() {
             i++;
             showScoreEnd.textContent = i;
-            playSound(dingingSoundBuffer)
-           /* const repDing = dingSound.cloneNode()
+
             if (!soundmute) {
-                repDing.play() //audio seems to be causing the problem
-                //repDing.addEventListener('ended', () => {
-                //});
-            }*/
+                playSound(dingingSoundBuffer)
+            }
             
             //WOAH IT WORKED!!!
             if (i == highScore) {
@@ -326,21 +320,18 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
 
         requestAnimationFrame(animate);
 
-
+*/
         
-       //do I do animation or frames?
-       /*
+       //do I do animation or frames? Frames is smooth, but too fast I think
+       
         const start = performance.now();
         scoreClimb()
         function scoreClimb() {
 
             i++;
             showScoreEnd.textContent = i;
-            const repDing = dingSound.cloneNode()
             if (!soundmute) {
-                repDing.play() //audio seems to be causing the problem
-                //repDing.addEventListener('ended', () => {
-                //});
+                playSound(dingingSoundBuffer)
             }
             
             if (i == highScore) {
@@ -348,17 +339,15 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
                 celebration.play()
             }
              if (i == points) {
-                 repDing.remove();
                     const end = performance.now();
                     console.log(`Time: ${end - start} ms`);
                 //clearInterval(countUpDisplay) //Make little ding ding sound?
             } else {
-                repDing.remove();
                 setTimeout(scoreClimb, 50);
             }
         }
 
-        */
+        
 
 
         
@@ -462,7 +451,7 @@ const clockCountdown = setInterval(() => {
             clearInterval(clockCountdown)
             setTimeout(() => {
                 document.getElementById("fullscoreScreen").style.display = "block"
-                endScreen.style.backgroundImage = "fullScorebackground.png"
+                endScreen.style.backgroundImage = "url('fullScorebackground.png')"
                 //document.getElementById("timeoutScreen").style.display = "none"
                 cardButton.removeEventListener('click', buttonCheck)
                 finishThisStupidGame();

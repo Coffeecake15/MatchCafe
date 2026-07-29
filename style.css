@@ -239,8 +239,9 @@ body {
   position: absolute;
   font-style: oblique;
   color: #ece3e3;
-  top: 35%;
-  right: 48%;
+  top: 33%;
+  right: 47%;
+  transform: rotate(1deg);
   font-family: "ShortStack";
   font-size: 50px;
   padding-right: 0.2em; 
@@ -248,10 +249,11 @@ body {
 }
 
 #newHighScore {
+  transform: rotate(1deg);
   position: absolute;
   color:#f0efe7;
-  top: 45%;
-  right: 44%;
+  top: 43%;
+  right: 42%;
   font-family: "ShortStack";
   font-size: 30px;
 }
