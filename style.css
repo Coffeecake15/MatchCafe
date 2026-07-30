@@ -158,6 +158,7 @@ body {
 #goBackButton {
   display: block;
   position: fixed;
+  width: 5%;
   margin: 0;
   left: 30%;
   top: 93%;

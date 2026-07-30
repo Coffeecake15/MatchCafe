@@ -81,8 +81,9 @@ This allows random images to be chosen based on a random number assortment.
 
     //Add some event listeners for buttons
     document.getElementById("goHomeEnd").addEventListener('click', goHome)
-    //The three below are old testers
-    //document.getElementById("goBackButton").addEventListener('click', goHome)
+    document.getElementById("goBackButton").addEventListener('click', quit)
+    //The three below are old testers. Keep them for the future
+
     //document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
     //document.getElementById("instantFinish").addEventListener('click', clearingout);
     document.getElementById("donationButton").addEventListener('click', e => {
@@ -121,6 +122,7 @@ This allows random images to be chosen based on a random number assortment.
     var source = context.createMediaElementSource(dingSoundNode);
     source.connect(analyser);
     analyser.connect(context.destination);
+    loadDingSound("Audio/pointsclimbing.mp3");
 
     }, false);
 
@@ -164,7 +166,7 @@ This allows random images to be chosen based on a random number assortment.
             source.start(0);                          // play the source now
         }
 
-        //const newDing = loadDingSound("Audio/pointsclimbing.mp3");
+        
 
 //end of sound figuring
 
@@ -232,7 +234,7 @@ if (localStorage.getItem("usersHighestScore") != null) {
     highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
 }
 
-function removeScore() { //for testing purposes, clear out your score and reload
+function removeScore() { //for testing purposes, clear out your score and reload. Ended up keeping
     if (confirm("Are you sure you want to reset your high score?")) {
         localStorage.clear();
         window.location.reload();
@@ -242,7 +244,7 @@ function removeScore() { //for testing purposes, clear out your score and reload
 
 function goHome() {
         clickingSound.play()
-        //window.location.reload();
+        //window.location.reload(); Stopped doing this to save song placement and settings
     checkLoading('openingScreen').then(() => { 
          console.log("cllick")
         endScreen.style.display = "none";
@@ -252,6 +254,13 @@ function goHome() {
         highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
         });
    
+}
+
+function quit() {
+    clearingout();
+    if (confirm("Are you sure you want to quit?")) {
+            goHome();
+        }
 }
 
 function checkLoading(container) {
@@ -292,7 +301,7 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
         highScore = 0;
     }
     let i = -1;
-    if (points != 0) { //change this back to 0
+    if (points != 0) { 
         console.log("points is running")
        /*
         function animate() {
@@ -341,7 +350,6 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
              if (i == points) {
                     const end = performance.now();
                     console.log(`Time: ${end - start} ms`);
-                //clearInterval(countUpDisplay) //Make little ding ding sound?
             } else {
                 setTimeout(scoreClimb, 50);
             }
@@ -361,10 +369,9 @@ function finishThisStupidGame() { //Instant finish for the sake of testing
 }
 
 function loadGame() {
-//Variables and everything are set up here. User doesn't see anything until everything here is finished loading.
-//  Promise function waits until images are loaded to actually show and start the game, which happens in a seperate function, startGame()
+    //Variables and everything are set up here. User doesn't see anything until everything here is finished loading.
+    //  Promise function waits until images are loaded to actually show and start the game, which happens in a seperate function, startGame()
 
-    //oofykins, everything gets messed up because everything was already created at the start of loading. Can either just reload page, or change the setup here
     //restart the game!
      isSecondClick = false;
      disableClick = true;
@@ -419,20 +426,19 @@ checkLoading('divBoard').then(() => {
 
 function startGame() {
 
-   // document.getElementById("loadScreen").style.display = "none"
     openingScreen.style.display = "none"
     timerDisplay.innerHTML = timeLeft;
     gameScreen.style.display = "block"
     pointDisplay.innerHTML = "Points: " + points
 
-//UNCOMMENT THIS!!!!! Commented now to save time, but is crucial during gameplay!
+
 setTimeout(() => {
   for (let i = 1; i < 19; i++) {
     document.getElementById("card" + i).src = "Card_Images/bro.png";
     disableClick = false;
 }
 }, 2000);
-playSound(newDing)
+
 const clockCountdown = setInterval(() => {
         timeLeft--;
         timerDisplay.innerHTML = timeLeft;
@@ -508,30 +514,11 @@ function buttonCheck(e) {
     //if cardName is div and not img, then you need to change to get query selector 
     
     let testDiv = e.target.id;
-    /*
-    if (testDiv.slice(0, 3) == "div") { //not detecting it as a div
-        cardSrc = cardSrc.querySelector("img");
-        console.log("oofykins")
-    }*/
 
     checkLoading('divBoard').then(() => { //this promise (should) prevent the card from flipping with no animation
         turnOnFlip(divRefForFlip, cardSrc, imageName)
     });
     
-    
-
-
-   // divRefForFlip.classList.remove("card-flip")
-
-    /*flips either way, probably no need
-    if (cardSrc.getAttribute("src") == imageName) {
-        cardSrc.src = "Card_Images/bro.png"
-    } else {
-        
-    cardSrc.src = imageName
-    }
-*/
-
 
 
         //Checks if this is the match card. 
@@ -628,36 +615,3 @@ function turnOnFlip(cardToFlip, card, name) {
 
     }, 1000);
 }
-
-
-
-
-//when a card is clicked. 
-/*
-do event listener?
-// 2. Define the event handler function
-
-
-
-
-// 3. Attach the event listener
-actionButton.addEventListener('click', handleButtonClick);
-
-
-flip function?
-function flipImage(card) {
-    let cardName = card;
-
-    Note: e.target.id will be card + number. Get the image that correlates to the card's index in the cardNameCorrelationArray
-    document.getElementById(cardName).src = cardNameCorrelation[cardName.at(4)]
-}
-
-function flipBack(card) {
-    let cardName = card;
-
-    Note: e.target.id will be card + number. Get the image that correlates to the card's index in the cardNameCorrelationArray
-    document.getElementById(cardName).src = whatever the generic back image is.
-}
-
-
-*/
