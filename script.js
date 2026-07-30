@@ -45,11 +45,8 @@ This allows random images to be chosen based on a random number assortment.
     /*AUDIO*/
     let clickingSound = document.getElementById("clickSound");
     let flipSound = document.getElementById("cardFlip");
-    //const dingSound = new Audio("Audio/pointsclimbing.mp3");
     let dingSoundNode = document.querySelector("#pointsSFX")
-   //dingSound.preload = "auto"
     const celebration = new Audio("Audio/celebrationHorn.mp3")
-    //let celebration = document.getElementById("celebration");
     flipSound.volume = "0.5"
     const backgroundMusic = document.getElementById("bgmusic");
     const isPlaying = !backgroundMusic.ended && backgroundMusic.currentTime > 0;
@@ -82,6 +79,8 @@ This allows random images to be chosen based on a random number assortment.
     //Add some event listeners for buttons
     document.getElementById("goHomeEnd").addEventListener('click', goHome)
     document.getElementById("goBackButton").addEventListener('click', quit)
+    document.getElementById("goBackButton").addEventListener('click', clearingout)
+
     //The three below are old testers. Keep them for the future
 
     //document.getElementById("instantFinish").addEventListener('click', finishThisStupidGame);
@@ -231,7 +230,7 @@ function origGame() {
 
  //if user has played before, show their highest score
 if (localStorage.getItem("usersHighestScore") != null) {
-    highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
+    highScoreDisplay.textContent = "High Score: " + localStorage.getItem("usersHighestScore");
 }
 
 function removeScore() { //for testing purposes, clear out your score and reload. Ended up keeping
@@ -251,13 +250,12 @@ function goHome() {
         openingScreen.style.display = "flex"
         gameScreen.style.display = "none"
         endScreen.style.display = "none"
-        highScoreDisplay.innerHTML = "High Score: " + localStorage.getItem("usersHighestScore");
+        highScoreDisplay.textContent = "High Score: " + localStorage.getItem("usersHighestScore");
         });
    
 }
 
 function quit() {
-    clearingout();
     if (confirm("Are you sure you want to quit?")) {
             goHome();
         }
@@ -427,9 +425,9 @@ checkLoading('divBoard').then(() => {
 function startGame() {
 
     openingScreen.style.display = "none"
-    timerDisplay.innerHTML = timeLeft;
+    timerDisplay.textContent = timeLeft;
     gameScreen.style.display = "block"
-    pointDisplay.innerHTML = "Points: " + points
+    pointDisplay.textContent = "Points: " + points
 
 
 setTimeout(() => {
@@ -441,7 +439,8 @@ setTimeout(() => {
 
 const clockCountdown = setInterval(() => {
         timeLeft--;
-        timerDisplay.innerHTML = timeLeft;
+        timerDisplay.textContent = timeLeft;
+        //When timer runs out
         if (timeLeft == 0) {
             clearInterval(clockCountdown)
             setTimeout(() => {
@@ -453,6 +452,7 @@ const clockCountdown = setInterval(() => {
             
         }
 
+        //if player gets all matches, show fullscorescreen and hide timeout, and finishthisstupdi game. Special win screen, too
         if (matches == 9) {
             clearInterval(clockCountdown)
             setTimeout(() => {
@@ -464,12 +464,14 @@ const clockCountdown = setInterval(() => {
             }, 20)
             
         }
+
+        //If user quits, or for testing, clearout function allows game to be replayed
         if (clearout == true) {
             cardButton.removeEventListener('click', buttonCheck)
             clearInterval(clockCountdown);
         }
 
-        //if all matches, show fullscorescreen and hide timeout, and finishthisstupdi game
+
 
         }, 1000);
     
@@ -535,12 +537,6 @@ function buttonCheck(e) {
         isSecondClick = true;
     }
 
-
-
-
-    /*if (imageName.at()) {
-    
-    }*/
 }
 
 
@@ -561,7 +557,7 @@ function checkMatch(firstCard, secondCard, firstCardSrc, secondCardSrc, firstCar
         points += pointInterval
         matches++
         takenCards.push();
-        pointDisplay.innerHTML = "Points: " + points
+        pointDisplay.textContent = "Points: " + points
         //make this update automaticallY? idk
     } else {
         disableClick = true;
