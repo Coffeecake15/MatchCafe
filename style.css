@@ -93,22 +93,28 @@ body {
 .screenButtons:hover {
   transform: scale(1.1);
 }
+
 #outerDiv {
   display: flex;
   flex-direction: column; 
+  align-items: center; 
   justify-content: center; 
-  align-items: center;     
   min-height: 100px; 
   min-width: auto;
   max-height: 80vh;
   max-width: 1000vh;
+
   margin: 0;
-  padding-top: 10px;   
+  /* 
+    padding-top: 10px;  
+      */
 }
 
 #pointsDiv {
   display: block;
   position: fixed;
+  justify-content: center; 
+  align-items: center;  
   margin: 0;
   top: 90%;
 }
@@ -130,16 +136,17 @@ body {
 }
 
 #gameScreen{
-  display: flex;
-  flex-direction: column; 
+  /*flex-direction: column; 
   justify-content: center; 
-  align-items: center;     
+    align-items: center;   */
+    
+  display: flex;
   min-height: 1000px; 
   min-width: auto;
   max-height: 100%;
   max-width: auto;
   margin: 0;
-  overflow: hidden; 
+
   background-image: url("screen2.png");
   background-size: cover;
 }
@@ -149,10 +156,11 @@ body {
   min-height: 50%;
   width: 70%;
   max-width: 100%;
-  max-height: 60vh;
+  max-height: 70vh;
   grid-template-columns: repeat(6, 5fr); 
   gap: 2%; 
   box-sizing: border-box;
+  padding-bottom: 15%;
 }
 
 #goBackButton {
